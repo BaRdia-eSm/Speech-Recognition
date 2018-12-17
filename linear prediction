@@ -1,0 +1,32 @@
+import numpy as np
+import random
+from scipy.signal import lfilter
+
+def convm(X, p):
+    A = np.zeros(shape=(len(X) + p - 1, p))
+    for i in range(p):
+        A[i:len(X) + i, i] = X
+    return A
+
+X = np.array([1, 2, 3])
+p = 6
+mean, stdev = 0, 1
+print(convm(X, p))
+
+len_x = 5
+d = np.array([random.uniform(0, 1) for _ in range(len_x)])
+v = np.random.normal(mean, stdev, len_x)
+x = d + v
+xh = np.conjugate(x)
+XXh = np.dot(x.reshape(len_x, 1), [xh])
+
+convm_x = convm(x, p)
+convm_d = convm(d, p)
+rdx = np.dot(np.transpose(convm_x), convm_d) / len_x - 1
+
+print(d)
+print(v)
+print(x)
+print(xh)
+print(XXh)
+print(rdx.shape)
